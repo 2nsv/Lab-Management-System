@@ -1,72 +1,71 @@
-SELECT * 
-FROM Patient 
-ORDER BY Patient_ID;
-
-SELECT * 
-FROM Patient 
-WHERE (Age>=70);
-
-SELECT * 
-FROM Patient 
-WHERE (Gender='Male');
-
-SELECT * 
-FROM Patient 
-WHERE Phone LIKE '010%';
-
-SELECT * 
-FROM Employee ; 
-
-SELECT * 
-FROM Lab_Test 
-ORDER BY Test_ID;
-
-SELECT * 
-FROM Lab_Order 
-ORDER BY Order_ID;
-
-SELECT * 
-FROM Payment 
-ORDER BY Payment_ID;
-
-SELECT * 
-FROM Payment 
-WHERE Status='Partially Paid';
-
-SELECT * 
-FROM Order_Test;
-
-SELECT * 
-FROM Order_Test 
-WHERE (Result='High Glucose');
-
-SELECT 
-    P.Patient_Name      AS "Patient Name",
-    P.Phone             AS "Phone Number",
-    LO.Order_ID         AS "Order ID",
-    OT.Test_ID          AS "Test ID",
-    PAY.Status          AS "Payment Status",
-    OT.Result           AS "Test Result"
-
-FROM Patient P
-
-JOIN Lab_Order LO
-    ON P.Patient_ID = LO.Patient_ID
-
-JOIN Order_Test OT
-    ON LO.Order_ID = OT.Order_ID
-
-JOIN Payment PAY
-    ON LO.Order_ID = PAY.Order_ID
-
-WHERE PAY.Payment_ID = (
-    SELECT MAX(P2.Payment_ID)
-    FROM Payment P2
-    WHERE P2.Order_ID = LO.Order_ID
+CREATE TABLE Patient (
+    Patient_ID NUMBER PRIMARY KEY,
+    Patient_Name NVARCHAR2(50) NOT NULL,
+    Age NUMBER CHECK (Age > 0),
+    Phone NVARCHAR2(20),
+    Gender NVARCHAR2(10) CHECK (Gender IN ('Male', 'Female'))
 );
 
+CREATE TABLE Employee (
+    Emp_ID NUMBER PRIMARY KEY,
+    Emp_Name NVARCHAR2(50) NOT NULL
+);
 
-SELECT Test_ID, COUNT(*) AS Total_Requests
-FROM Order_Test
+CREATE TABLE Lab_Test (
+    Test_ID NUMBER PRIMARY KEY,
+    Test_Name NVARCHAR2(50) NOT NULL,
+    Price NUMBER CHECK (Price > 0)
+);
+
+CREATE TABLE Lab_Order (
+    Order_ID NUMBER PRIMARY KEY,
+    Patient_ID NUMBER,
+    Order_Date DATE,
+    Status NVARCHAR2(20) 
+        CHECK (Status IN ('Pending', 'In Progress', 'Completed')),
+
+    CONSTRAINT FK_Order_Patient
+        FOREIGN KEY (Patient_ID)
+        REFERENCES Patient(Patient_ID)
+);
+
+CREATE TABLE Payment (
+    Payment_ID NUMBER PRIMARY KEY,
+    Order_ID NUMBER,
+    Amount NUMBER CHECK (Amount > 0),
+    Payment_Date DATE,
+    Method NVARCHAR2(30),
+    Status NVARCHAR2(20)
+        CHECK (Status IN ('Paid', 'Partially Paid', 'Pending')),
+
+    CONSTRAINT FK_Payment_Order
+        FOREIGN KEY (Order_ID)
+        REFERENCES Lab_Order(Order_ID)
+);
+
+CREATE TABLE Order_Test (
+    Order_ID NUMBER,
+    Test_ID NUMBER,
+    Emp_ID NUMBER,
+    Result NVARCHAR2(20),
+    Status NVARCHAR2(20)
+        CHECK (Status IN ('Pending', 'Completed')),
+
+    CONSTRAINT PK_Order_Test
+        PRIMARY KEY (Order_ID, Test_ID),
+
+    CONSTRAINT FK_OT_Order
+        FOREIGN KEY (Order_ID)
+        REFERENCES Lab_Order(Order_ID),
+
+    CONSTRAINT FK_OT_Test
+        FOREIGN KEY (Test_ID)
+        REFERENCES Lab_Test(Test_ID),
+
+    CONSTRAINT FK_OT_Employee
+        FOREIGN KEY (Emp_ID)
+        REFERENCES Employee(Emp_ID)
+);
+
 GROUP BY Test_ID
 ORDER BY Total_Requests DESC;
