@@ -1,13 +1,22 @@
 # 📌 Lab Management System Database
 
 ## 📖 Overview
-This project is a relational database system designed using Oracle SQL to manage a laboratory workflow.  
-It handles patients, lab tests, orders, employees, and payments with full relationships and constraints.
+This project is a relational database system designed using Oracle SQL to manage a laboratory workflow.
+
+It handles:
+- Patients
+- Lab tests
+- Orders
+- Employees
+- Payments
+
+with full relationships and constraints.
 
 ---
 
-## Database Purpose
-The system simulates a real-world lab environment where:
+## 🧠 Database Purpose
+The system simulates a real-world laboratory environment where:
+
 - Patients place lab orders
 - Tests are assigned to employees
 - Payments are tracked per order
@@ -18,14 +27,14 @@ The system simulates a real-world lab environment where:
 ## 🛠️ Technologies Used
 - Oracle SQL Database
 - SQL Constraints (PK, FK, CHECK)
-- Data Modeling (Relational Schema)
-- Excel (for sample data integration)
+- Relational Database Modeling
+- Excel Integration
 
 ---
 
 ## 🗂️ Database Schema
 
-### Main Tables:
+### Main Tables
 - Patient
 - Employee
 - Lab_Test
@@ -36,10 +45,10 @@ The system simulates a real-world lab environment where:
 ---
 
 ## 🔗 Relationships
-- One Patient → Many Orders  
-- One Order → Many Tests (via Order_Test)  
-- One Order → One Payment  
-- One Employee → Many Test Results  
+- One Patient → Many Orders
+- One Order → Many Tests
+- One Order → One Payment
+- One Employee → Many Test Results
 
 ---
 
@@ -48,7 +57,7 @@ The system simulates a real-world lab environment where:
 - Primary & Foreign Key constraints
 - Data validation using CHECK constraints
 - Many-to-many relationship handling
-- Realistic lab workflow simulation
+- Realistic laboratory workflow simulation
 
 ---
 
@@ -57,11 +66,12 @@ The system simulates a real-world lab environment where:
 - Filter patients by gender
 - Search phone numbers
 - Track payment status
-- Join multiple tables for full report
+- Join multiple tables for reports
 
 ---
 
-## Example Query
+## 🧪 Example Query
+
 ```sql
 SELECT 
     P.Patient_Name,
@@ -70,23 +80,26 @@ SELECT
     PAY.Status AS Payment_Status,
     OT.Result
 FROM Patient P
-JOIN Lab_Order LO ON P.Patient_ID = LO.Patient_ID
-JOIN Order_Test OT ON LO.Order_ID = OT.Order_ID
-JOIN Payment PAY ON LO.Order_ID = PAY.Order_ID;
+JOIN Lab_Order LO 
+    ON P.Patient_ID = LO.Patient_ID
+JOIN Order_Test OT 
+    ON LO.Order_ID = OT.Order_ID
+JOIN Payment PAY 
+    ON LO.Order_ID = PAY.Order_ID;
 ```
 
 ---
 
-## What I Learned 
+## 🚀 What I Learned
 - Database design from scratch
 - Relational modeling (1:M, M:M)
 - Writing SQL queries
 - Data integrity using constraints
 - Building real-world database systems
-  
+
 ---
 
-## ⭐ Future Improvements 
+## ⭐ Future Improvements
 - Add GUI application
 - Build web-based interface
 - Add analytics dashboard
@@ -94,10 +107,10 @@ JOIN Payment PAY ON LO.Order_ID = PAY.Order_ID;
 
 ---
 
-##💡 Note
+## 💡 Note
 This project is for educational purposes and demonstrates a real laboratory database system built using Oracle SQL.
 
 ---
 
-## Author 
+## 👤 Author
 Anas Ahmed
