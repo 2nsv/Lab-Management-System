@@ -67,5 +67,3 @@ CREATE TABLE Order_Test (
         REFERENCES Employee(Emp_ID)
 );
 
-GROUP BY Test_ID
-ORDER BY Total_Requests DESC;
